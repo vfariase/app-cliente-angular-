@@ -2,6 +2,8 @@ import { ClienteService } from './cliente.service';
 import { CLIENTES } from './clientes.json';
 import { Component, OnInit } from '@angular/core';
 import {Cliente} from './cliente';
+import swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-clientes',
@@ -18,6 +20,7 @@ export class ClientesComponent implements OnInit{
     this.clienteService.getClientes().subscribe(
       (clientes)=>{
          this.clientes=clientes
+         
       }
     );
   }
