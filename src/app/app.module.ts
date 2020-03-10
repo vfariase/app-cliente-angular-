@@ -18,7 +18,8 @@ const routes:Routes=[
   {path:'',redirectTo:'/clientes',pathMatch:'full'},
   {path:'directivas',component:DirectivaComponent},
   {path:'clientes',component:ClientesComponent},
-  {path:'clientes/form',component:FormComponent}
+  {path:'clientes/form',component:FormComponent},
+  {path:'clientes/form/:id',component:FormComponent}
 ]
 
 
@@ -33,9 +34,10 @@ const routes:Routes=[
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     RouterModule.forRoot(routes),
     HttpClientModule,
-    FormsModule
+    
   ],
   providers: [ClienteService],
   bootstrap: [AppComponent]
