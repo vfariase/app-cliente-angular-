@@ -17,7 +17,7 @@ export class FormComponent implements OnInit {
   constructor(private clienteService: ClienteService, private router:Router,private activatedRoute:ActivatedRoute) { }
 
   ngOnInit(): void {
-    
+    this.cargarCliente();
   }
 
   create():void{
@@ -25,7 +25,7 @@ export class FormComponent implements OnInit {
     this.clienteService.create(this.cliente).
     subscribe(cliente=>{
         this.router.navigate(['/clientes'])
-        swal.fire('Nuevo cliente',`Cliente, creado con exito`,'success')
+        swal.fire('Nuevo cliente',`Cliente,  creado con exito`,'success')
       }
     );
   }
@@ -45,4 +45,14 @@ export class FormComponent implements OnInit {
       }
     );
   }
+
+
+  update(){
+    this.clienteService.update(this.cliente).subscribe(
+       cliente =>{
+        this.router.navigate(['clientes'])   
+       }
+    )
+  }
+
 }
