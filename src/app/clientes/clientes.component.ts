@@ -25,4 +25,34 @@ export class ClientesComponent implements OnInit{
     );
   }
 
+
+  delete(cliente:Cliente){
+     
+      console.log("metodo  eliminar : "+cliente.id)
+     swal.fire({
+      title: 'Estás seguro de eliminar?',
+      text: "No podrás revertir esto!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.value) {
+
+        this.clienteService.delete(cliente.id).subscribe(
+          ()=>{
+            this.clientes =this.clientes.filter(cli => cli != cliente)
+            swal.fire(
+              'Eliminado!',
+              'Tu Archivo ha sido eliminado.',
+              'success'
+            )
+          }
+        )
+
+      }
+    })
+  }
+
 }
