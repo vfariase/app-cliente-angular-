@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 import {Observable,of,throwError} from 'rxjs';
 import {HttpClient,HttpHeaders} from '@angular/common/http';
 import {map,catchError} from 'rxjs/operators';
-
+import {formatDate} from '@angular/common';
 
 //catchError se encarga de interceptar el observable  en busca de fallas.
 
@@ -22,11 +22,16 @@ export class ClienteService {
 
   getClientes(): Observable<Cliente[]>{
     return this.httpClient.get(this.urlEndpoint).pipe(
-      map(response =>response as Cliente[])
+      map(response => {
+        let clientes=response as Cliente[];
+       return clientes.map(cliente =>{
+                cliente.nombre = cliente.nombre.toUpperCase();
+                cliente.fecha=formatDate(cliente.fecha,'dd-MM-yyyy','En-US');
+                return cliente; 
+       });
+      })
       
-    )
-
-  }
+      )}
 
   create(cliente: Cliente): Observable<Cliente[]>{
     return this.httpClient.post(this.urlEndpoint,cliente,{headers:this.httpHeaders}).pipe(
