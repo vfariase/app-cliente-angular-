@@ -6,7 +6,7 @@ import {Observable,of,throwError} from 'rxjs';
 import {HttpClient,HttpHeaders} from '@angular/common/http';
 import {map,catchError} from 'rxjs/operators';
 import {formatDate} from '@angular/common';
-
+import {DatePipe} from '@angular/common';
 //catchError se encarga de interceptar el observable  en busca de fallas.
 
 
@@ -26,7 +26,9 @@ export class ClienteService {
         let clientes=response as Cliente[];
        return clientes.map(cliente =>{
                 cliente.nombre = cliente.nombre.toUpperCase();
-                cliente.fecha=formatDate(cliente.fecha,'dd-MM-yyyy','En-US');
+                //cliente.fecha=formatDate(cliente.fecha,'dd-MM-yyyy','En-US');
+                let datePipe = new DatePipe('En-US');
+                cliente.fecha=datePipe.transform(cliente.fecha,'dd-mm-yyyy');
                 return cliente; 
        });
       })
