@@ -4,10 +4,11 @@ import { Cliente } from './cliente';
 import { Injectable } from '@angular/core';
 import {Observable,of,throwError} from 'rxjs';
 import {HttpClient,HttpHeaders} from '@angular/common/http';
-import {map,catchError} from 'rxjs/operators';
-import {formatDate} from '@angular/common';
-import {DatePipe} from '@angular/common';
+import {map,catchError,tap} from 'rxjs/operators';
+import { formatDate,DatePipe  } from '@angular/common';
+
 //catchError se encarga de interceptar el observable  en busca de fallas.
+
 
 
 @Injectable({
@@ -20,17 +21,31 @@ export class ClienteService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getClientes(): Observable<Cliente[]>{
+  getClientes(): Observable<any>{
     return this.httpClient.get(this.urlEndpoint).pipe(
+      tap(response =>{
+       console.log('ClienteService: tap 1');
+       let clientes = response as Cliente[];
+       clientes.forEach(cliente => {
+           console.log(cliente.nombre);
+       });
+      }),
       map(response => {
         let clientes=response as Cliente[];
+        
        return clientes.map(cliente =>{
                 cliente.nombre = cliente.nombre.toUpperCase();
                 //cliente.fecha=formatDate(cliente.fecha,'dd-MM-yyyy','En-US');
-                let datePipe = new DatePipe('En-US');
-                cliente.fecha=datePipe.transform(cliente.fecha,'dd-mm-yyyy');
+                //let datePipe = new DatePipe('es');
+                //cliente.fecha=datePipe.transform(cliente.fecha,'EEEE dd,MMMM yyyy');
                 return cliente; 
        });
+      }),
+      tap(response =>{
+        console.log('ClienteService: tap 2');
+        response.forEach( cliente => {
+          console.log(cliente.nombre);
+      });
       })
       
       )}
