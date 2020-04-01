@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import  swal  from 'sweetalert2';
 //import { CLIENTES } from './clientes.json';
 import { Cliente } from './cliente';
@@ -6,6 +7,7 @@ import {Observable,of,throwError} from 'rxjs';
 import {HttpClient,HttpHeaders} from '@angular/common/http';
 import {map,catchError,tap} from 'rxjs/operators';
 import { formatDate,DatePipe  } from '@angular/common';
+
 
 //catchError se encarga de interceptar el observable  en busca de fallas.
 
@@ -19,31 +21,35 @@ export class ClienteService {
   private urlEndpoint:string='http://localhost:8090/api/clientes';
   private httpHeaders=new HttpHeaders({'Content-Type':'application/json'})
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient, private router:Router) { }
 
-  getClientes(): Observable<any>{
-    return this.httpClient.get(this.urlEndpoint).pipe(
-      tap(response =>{
+  getClientes(page: number): Observable<any>{
+    return this.httpClient.get(this.urlEndpoint+'/page/'+page).pipe(
+      tap((response:any) =>{
        console.log('ClienteService: tap 1');
-       let clientes = response as Cliente[];
-       clientes.forEach(cliente => {
+       //let clientes = response as Cliente[];
+       (response.content as Cliente[]).forEach(cliente => {
            console.log(cliente.nombre);
+           console.log(response);
+           let total = +response.totalPages;
+           console.log(total)
        });
       }),
-      map(response => {
-        let clientes=response as Cliente[];
+      map((response:any) => {
+        //let clientes=response as Cliente[];
         
-       return clientes.map(cliente =>{
+       (response.content as Cliente[]).map(cliente =>{
                 cliente.nombre = cliente.nombre.toUpperCase();
                 //cliente.fecha=formatDate(cliente.fecha,'dd-MM-yyyy','En-US');
                 //let datePipe = new DatePipe('es');
                 //cliente.fecha=datePipe.transform(cliente.fecha,'EEEE dd,MMMM yyyy');
                 return cliente; 
        });
+       return response;
       }),
       tap(response =>{
         console.log('ClienteService: tap 2');
-        response.forEach( cliente => {
+        (response.content as Cliente[]).forEach( cliente => {
           console.log(cliente.nombre);
       });
       })
