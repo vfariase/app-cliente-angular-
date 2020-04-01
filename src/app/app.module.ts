@@ -17,6 +17,7 @@ import { FormComponent } from './clientes/form.component'
 import { registerLocaleData } from '@angular/common';
 import localeES from '@angular/common/locales/es';
 import { LOCALE_ID } from '@angular/core';
+import { PaginatorComponent } from './paginator/paginator.component';
 
 registerLocaleData(localeES, 'es');
 
@@ -24,6 +25,7 @@ const routes:Routes=[
   {path:'',redirectTo:'/clientes',pathMatch:'full'},
   {path:'directivas',component:DirectivaComponent},
   {path:'clientes',component:ClientesComponent},
+  {path:'clientes/page/:page',component:ClientesComponent},
   {path:'clientes/form',component:FormComponent},
   {path:'clientes/form/:id',component:FormComponent}
 ]
@@ -36,7 +38,8 @@ const routes:Routes=[
     ClientesComponent,
     FooterComponent,
     DirectivaComponent,
-    FormComponent
+    FormComponent,
+    PaginatorComponent
   ],
   imports: [
     BrowserModule,
